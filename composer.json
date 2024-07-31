@@ -1,0 +1,16 @@
+{
+    "name": "danilocgsilva/data-to-seed-laravel",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Danilocgsilva\\DataToSeedLaravel\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Danilo Silva",
+            "email": "contact@danilocgsilva.me"
+        }
+    ],
+    "require": {}
+}
