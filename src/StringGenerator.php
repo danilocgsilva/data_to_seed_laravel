@@ -29,10 +29,16 @@ class StringGenerator
         $stringBuilder = new StringBuilder();
         $stringBuilder->setTableName($this->tableName);
 
-        $insert = new Insert();
-        $insert->addNameValuePair("CODIGO_DO_PRODUTO", 1000889, "expression");
-        $insert->addNameValuePair("NOME_DO_PRODUTO", "Sabor da Montanha - 700 ml - Uva", "string");
-        $insert->addNameValuePair("EMBALAGEM", "Garrafa", "string");
+        $fields = $this->getFieldsFromTable($this->tableName);
+
+        foreach ($this->getData() as $rowData) {
+            $insert = new Insert();
+            foreach ($fields as $field) {
+                $fieldName = $field["name"];
+                $insert->addNameValuePair($fieldName, $rowData[$field], $field["type"]);
+            }
+            $stringBuilder->addInsert($insert);
+        }
 
         return $stringBuilder->get();
     }
@@ -47,5 +53,10 @@ class StringGenerator
     {
         $this->tableName = $tableName;
         return $this;
+    }
+
+    private function getFieldsFromTable()
+    {
+        
     }
 }
