@@ -19,12 +19,29 @@ class InsertTest extends TestCase
         $this->insert = new Insert();
     }
     
-    public function test1GetString()
+    public function test1GetString(): void
     {
         $this->insert->addNameValuePair("name", "str_random(10)", "expression");
         
         $expectedString = "    'name' => str_random(10),";
         
         $this->assertSame($expectedString, $this->insert->getString());
+    }
+
+    public function test2GetString(): void
+    {
+        $this->insert->addNameValuePair("CODIGO_DO_PRODUTO", 1000889, "expression");
+        $this->insert->addNameValuePair("NOME_DO_PRODUTO", "Sabor da Montanha - 700 ml - Uva", "string");
+        $this->insert->addNameValuePair("EMBALAGEM", "Garrafa", "string");
+
+        $expectedString = <<<EOF
+    'CODIGO_DO_PRODUTO' => 1000889,
+    'NOME_DO_PRODUTO' => 'Sabor da Montanha - 700 ml - Uva',
+    'EMBALAGEM' => 'Garrafa',
+EOF;
+        $this->assertSame(
+            $expectedString,
+            $this->insert->getString()
+        );
     }
 }

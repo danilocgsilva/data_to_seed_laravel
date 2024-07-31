@@ -8,7 +8,7 @@ class Insert
 {
     private array $nameValuePairs;
     
-    public function addNameValuePair(string $name, string $value, string $valueType): self
+    public function addNameValuePair(string $name, string|int $value, string $valueType): self
     {
         $this->nameValuePairs[] = [$name, $value, $valueType];
         return $this;

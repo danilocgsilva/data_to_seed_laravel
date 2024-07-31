@@ -27,6 +27,12 @@ class StringGenerator
     public function generate(): string
     {
         $stringBuilder = new StringBuilder();
+        $stringBuilder->setTableName($this->tableName);
+
+        $insert = new Insert();
+        $insert->addNameValuePair("CODIGO_DO_PRODUTO", 1000889, "expression");
+        $insert->addNameValuePair("NOME_DO_PRODUTO", "Sabor da Montanha - 700 ml - Uva", "string");
+        $insert->addNameValuePair("EMBALAGEM", "Garrafa", "string");
 
         return $stringBuilder->get();
     }
