@@ -8,21 +8,38 @@ use Config;
 
 class StringGenerator
 {
-    private string $database;
+    private string $databaseName;
+
+    private string $tableName;
+
+    private string $databasePassword;
+
+    private string $databaseHost;
 
     public function __construct()
     {
-        var_dump(Config::get('database.connections.mysql'));
-    }
-    
-    public function setDatabase(string $database): self
-    {
-        $this->database = $database;
-        return $this;
+        $databaseConfigurationData = Config::get('database.connections.mysql');
+
+        $this->databasePassword = $databaseConfigurationData["password"];
+        $this->databaseHost = $databaseConfigurationData["host"];
     }
     
     public function generate(): string
     {
-        return "Hello world!";
+        $stringBuilder = new StringBuilder();
+
+        return $stringBuilder->get();
+    }
+
+    public function setDatabaseName(string $databaseName): self
+    {
+        $this->databaseName = $databaseName;
+        return $this;
+    }
+
+    public function setTableName(string $tableName): self
+    {
+        $this->tableName = $tableName;
+        return $this;
     }
 }

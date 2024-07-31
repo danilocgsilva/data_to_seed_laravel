@@ -6,11 +6,18 @@
             "Danilocgsilva\\DataToSeedLaravel\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Danilocgsilva\\DataToSeedLaravel\\Tests\\": "tests/"
+        }
+    },
     "authors": [
         {
             "name": "Danilo Silva",
             "email": "contact@danilocgsilva.me"
         }
     ],
-    "require": {}
+    "require-dev": {
+        "phpunit/phpunit": "^11.2"
+    }
 }
