@@ -16,11 +16,15 @@ class Insert
 
     public function getString(): string
     {
-        $returnString = "";
+        $returnStringArray = [];
         foreach ($this->nameValuePairs as $nameValuePair) {
-            $returnString .= '    \'' . $nameValuePair[0] . '\' => ' . $nameValuePair[1] . ',';
+            if ($nameValuePair[2] === "expression") {
+                $returnStringArray[] = '    \'' . $nameValuePair[0] . '\' => ' . $nameValuePair[1] . ',';
+            } elseif ($nameValuePair[2] === "string") {
+                $returnStringArray[] = '    \'' . $nameValuePair[0] . '\' => \'' . $nameValuePair[1] . '\',';
+            }
         }
 
-        return $returnString;
+        return implode(PHP_EOL, $returnStringArray);
     }
 }

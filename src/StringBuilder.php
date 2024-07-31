@@ -17,25 +17,18 @@ class StringBuilder
         return $this;
     }
 
-    // public function addInsert(Insert $insert): self
-    // {
-    //     $this->inserts[] = $insert;
-    //     return $this;
-    // }
+    public function addInsert(Insert $insert): self
+    {
+        $this->inserts[] = $insert;
+        return $this;
+    }
     
     public function get(): string
     {
         $insertHeader = sprintf("DB::table('%s')->insert([", $this->tableName);
         $insertFooter = "]);";
-//         $insertBody = <<<EOF
-//     'name' => str_random(10),
-//     'email' => str_random(10).'@gmail.com',
-//     'password' => bcrypt('secret'),
-// EOF;
-
         $insertBody = $this->inserts[0]->getString();
         
-
         return $insertHeader . PHP_EOL . $insertBody . PHP_EOL . $insertFooter;
     }
 }

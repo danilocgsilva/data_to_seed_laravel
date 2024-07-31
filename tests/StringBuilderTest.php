@@ -25,6 +25,8 @@ class StringBuilderTest extends TestCase
         $insert->addNameValuePair("name", "str_random(10)", "expression");
         $insert->addNameValuePair("email", "str_random(10).'@gmail.com'", "expression");
         $insert->addNameValuePair("password", "bcrypt('secret')", "expression");
+
+        $this->stringBuilder->addInsert($insert);
         
         $expectedString = <<<EOF
 DB::table('Users')->insert([
@@ -47,12 +49,14 @@ EOF;
         $insert->addNameValuePair("name", "Olivia", "string");
         $insert->addNameValuePair("surname", "Lane", "string");
         $insert->addNameValuePair("company", "qiskit", "string");
+
+        $this->stringBuilder->addInsert($insert);
         
         $expectedString = <<<EOF
 DB::table('QUsers')->insert([
     'name' => 'Olivia',
     'surname' => 'Lane',
-    'company' => 'qiskit,
+    'company' => 'qiskit',
 ]);
 EOF;
         $this->assertSame(

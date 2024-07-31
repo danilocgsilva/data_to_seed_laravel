@@ -21,7 +21,7 @@ class InsertTest extends TestCase
     
     public function test1GetString()
     {
-        $this->insert->addNameValuePair("name", "str_random(10)", "string");
+        $this->insert->addNameValuePair("name", "str_random(10)", "expression");
         
         $expectedString = "    'name' => str_random(10),";
         
