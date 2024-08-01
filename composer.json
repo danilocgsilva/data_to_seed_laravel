@@ -19,5 +19,8 @@
     ],
     "require-dev": {
         "phpunit/phpunit": "^11.2"
+    },
+    "require": {
+        "danilocgsilva/database_discover": "^1.8"
     }
 }

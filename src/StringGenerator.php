@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Danilocgsilva\DataToSeedLaravel;
 
 use Config;
+use Danilocgsilva\Database\Discover;
+use PDO;
 
 class StringGenerator
 {
@@ -16,12 +18,15 @@ class StringGenerator
 
     private string $databaseHost;
 
+    private string $databaseUser;
+
     public function __construct()
     {
         $databaseConfigurationData = Config::get('database.connections.mysql');
 
         $this->databasePassword = $databaseConfigurationData["password"];
         $this->databaseHost = $databaseConfigurationData["host"];
+        $this->databaseUser = $databaseConfigurationData["username"];
     }
     
     public function generate(): string
@@ -57,6 +62,16 @@ class StringGenerator
 
     private function getFieldsFromTable()
     {
-        
+        $databaseDiscover = new Discover();
+
+        $pdo = new PDO(
+            sprintf("mysql:host=%s;dbname=%s", $this->databaseHost, $this->databaseName),
+            $this->databaseUser,
+            $this->databasePassword
+        );
+
+        $fields = $databaseDiscover->getFieldsFromTable($this->tableName);
+
+        return "oi";
     }
 }
