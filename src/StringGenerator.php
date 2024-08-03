@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Danilocgsilva\DataToSeedLaravel;
 
 use Config;
-use Danilocgsilva\Database\Discover;
+use Danilocgsilva\Database\{Discover, Field};
 use PDO;
+use PDOStatement;
 
 class StringGenerator
 {
@@ -20,6 +21,10 @@ class StringGenerator
 
     private string $databaseUser;
 
+    private Discover $databaseDiscover;
+
+    private PDO $pdo;
+
     public function __construct()
     {
         $databaseConfigurationData = Config::get('database.connections.mysql');
@@ -28,19 +33,32 @@ class StringGenerator
         $this->databaseHost = $databaseConfigurationData["host"];
         $this->databaseUser = $databaseConfigurationData["username"];
     }
-    
+
     public function generate(): string
     {
+        $this->pdo = new PDO(
+            sprintf("mysql:host=%s;dbname=%s", $this->databaseHost, $this->databaseName),
+            $this->databaseUser,
+            $this->databasePassword
+        );
+
+        $this->databaseDiscover = (new Discover())->setPdo($this->pdo);
+        
         $stringBuilder = new StringBuilder();
         $stringBuilder->setTableName($this->tableName);
 
-        $fields = $this->getFieldsFromTable($this->tableName);
+        $databaseFieldsName = array_map(
+            fn (Field $field) => $field->getName(), 
+            iterator_to_array(
+                $this->databaseDiscover->getFieldsFromTable($this->tableName)
+            )
+        );
 
-        foreach ($this->getData() as $rowData) {
+        $fetchingLoop = $this->getData($databaseFieldsName);
+        while ($rowData = $fetchingLoop->fetch()) {
             $insert = new Insert();
-            foreach ($fields as $field) {
-                $fieldName = $field["name"];
-                $insert->addNameValuePair($fieldName, $rowData[$field], $field["type"]);
+            foreach ($databaseFieldsName as $key => $fieldName) {
+                $insert->addNameValuePair($fieldName, $rowData[$key], "string");
             }
             $stringBuilder->addInsert($insert);
         }
@@ -51,6 +69,7 @@ class StringGenerator
     public function setDatabaseName(string $databaseName): self
     {
         $this->databaseName = $databaseName;
+
         return $this;
     }
 
@@ -60,18 +79,13 @@ class StringGenerator
         return $this;
     }
 
-    private function getFieldsFromTable()
+    private function getData(array $fields): PDOStatement
     {
-        $databaseDiscover = new Discover();
-
-        $pdo = new PDO(
-            sprintf("mysql:host=%s;dbname=%s", $this->databaseHost, $this->databaseName),
-            $this->databaseUser,
-            $this->databasePassword
-        );
-
-        $fields = $databaseDiscover->getFieldsFromTable($this->tableName);
-
-        return "oi";
+        $fieldsmember = implode(", ", $fields);
+        $query = "SELECT " . $fieldsmember . " FROM " . $this->tableName . ";";
+        $preResults = $this->pdo->prepare($query);
+        $preResults->execute();
+        $preResults->setFetchMode(PDO::FETCH_NUM);
+        return $preResults;
     }
 }

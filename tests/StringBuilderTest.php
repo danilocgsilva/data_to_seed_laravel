@@ -64,4 +64,31 @@ EOF;
             $this->stringBuilder->get()
         );
     }
+
+    public function testSeveralinserts()
+    {
+        $this->stringBuilder->setTableName("juices");
+
+        $insert = new Insert();
+        $insert->addNameValuePair("product_code", "1000889", "string");
+        $insert->addNameValuePair("product_name", "Montain taste - 700 ml - Grape", "string");
+        $insert->addNameValuePair("packing", "Bottle", "string");
+
+        $this->stringBuilder->addInsert($insert);
+
+        $insert = new Insert();
+        $insert->addNameValuePair("product_code", "1002334", "string");
+        $insert->addNameValuePair("product_name", "Citrus Line - 1 L - Lemon", "string");
+        $insert->addNameValuePair("packing", "PET", "string");
+
+        $this->stringBuilder->addInsert($insert);
+
+        $expectedString = <<<EOF
+DB::table('QUsers')->insert([
+    'name' => 'Olivia',
+    'surname' => 'Lane',
+    'company' => 'qiskit',
+]);
+EOF;
+    }
 }
