@@ -25,10 +25,14 @@ class StringBuilder
     
     public function get(): string
     {
-        $insertHeader = sprintf("DB::table('%s')->insert([", $this->tableName);
-        $insertFooter = "]);";
-        $insertBody = $this->inserts[0]->getString();
+        $tableChunks = [];
+        foreach ($this->inserts as $insertionsObjects) {
+            $loopTableChunk = sprintf("DB::table('%s')->insert([", $this->tableName) . PHP_EOL;
+            $loopTableChunk .= $insertionsObjects->getString() . PHP_EOL;
+            $loopTableChunk .= "]);";
+            $tableChunks[] = $loopTableChunk;
+        }
         
-        return $insertHeader . PHP_EOL . $insertBody . PHP_EOL . $insertFooter;
+        return implode(PHP_EOL, $tableChunks);
     }
 }

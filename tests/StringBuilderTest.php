@@ -11,12 +11,12 @@ use PHPUnit\Framework\TestCase;
 class StringBuilderTest extends TestCase
 {
     private StringBuilder $stringBuilder;
-    
+
     public function setUp(): void
     {
-        $this->stringBuilder = new StringBuilder();        
+        $this->stringBuilder = new StringBuilder();
     }
-    
+
     public function test1Get(): void
     {
         $this->stringBuilder->setTableName("Users");
@@ -27,7 +27,7 @@ class StringBuilderTest extends TestCase
         $insert->addNameValuePair("password", "bcrypt('secret')", "expression");
 
         $this->stringBuilder->addInsert($insert);
-        
+
         $expectedString = <<<EOF
 DB::table('Users')->insert([
     'name' => str_random(10),
@@ -51,7 +51,7 @@ EOF;
         $insert->addNameValuePair("company", "qiskit", "string");
 
         $this->stringBuilder->addInsert($insert);
-        
+
         $expectedString = <<<EOF
 DB::table('QUsers')->insert([
     'name' => 'Olivia',
@@ -84,11 +84,20 @@ EOF;
         $this->stringBuilder->addInsert($insert);
 
         $expectedString = <<<EOF
-DB::table('QUsers')->insert([
-    'name' => 'Olivia',
-    'surname' => 'Lane',
-    'company' => 'qiskit',
+DB::table('juices')->insert([
+    'product_code' => '1000889',
+    'product_name' => 'Montain taste - 700 ml - Grape',
+    'packing' => 'Bottle',
+]);
+DB::table('juices')->insert([
+    'product_code' => '1002334',
+    'product_name' => 'Citrus Line - 1 L - Lemon',
+    'packing' => 'PET',
 ]);
 EOF;
+        $this->assertSame(
+            $expectedString,
+            $this->stringBuilder->get()
+        );
     }
 }
