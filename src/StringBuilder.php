@@ -11,7 +11,7 @@ class StringBuilder
     private string $tableName;
 
     /** @var \Danilocgsilva\DataToSeedLaravel\Insert[] */
-    private array $inserts;
+    private array $inserts = [];
     
     public function setTableName(string $tableName): self
     {

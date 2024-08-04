@@ -69,7 +69,6 @@ class StringGenerator
     public function setDatabaseName(string $databaseName): self
     {
         $this->databaseName = $databaseName;
-
         return $this;
     }
 
