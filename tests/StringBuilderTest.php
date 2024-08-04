@@ -7,6 +7,7 @@ namespace Danilocgsilva\DataToSeedLaravel\Tests;
 use Danilocgsilva\DataToSeedLaravel\Insert;
 use Danilocgsilva\DataToSeedLaravel\StringBuilder;
 use PHPUnit\Framework\TestCase;
+use Exception;
 
 class StringBuilderTest extends TestCase
 {
@@ -15,6 +16,20 @@ class StringBuilderTest extends TestCase
     public function setUp(): void
     {
         $this->stringBuilder = new StringBuilder();
+    }
+
+    public function testGetForgetSetTable(): void
+    {
+        $this->expectException(Exception::class);
+
+        $insert = new Insert();
+        $insert->addNameValuePair("name", "str_random(10)", "expression");
+        $insert->addNameValuePair("email", "str_random(10).'@gmail.com'", "expression");
+        $insert->addNameValuePair("password", "bcrypt('secret')", "expression");
+
+        $this->stringBuilder->addInsert($insert);
+
+        $this->stringBuilder->get();
     }
 
     public function test1Get(): void

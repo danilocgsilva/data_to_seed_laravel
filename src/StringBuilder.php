@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Danilocgsilva\DataToSeedLaravel;
 
+use Exception;
+
 class StringBuilder
 {
     private string $tableName;
@@ -25,6 +27,10 @@ class StringBuilder
     
     public function get(): string
     {
+        if (!isset($this->tableName)) {
+            throw new Exception("You forget to set the table to fetch the data.");
+        }
+        
         $tableChunks = [];
         foreach ($this->inserts as $insertionsObjects) {
             $loopTableChunk = sprintf("DB::table('%s')->insert([", $this->tableName) . PHP_EOL;
